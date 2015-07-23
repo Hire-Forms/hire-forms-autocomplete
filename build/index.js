@@ -175,15 +175,14 @@ var _react = _dereq_("react");
 
 var _react2 = _interopRequireDefault(_react);
 
-var stringOrArray = _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.string, _react2["default"].PropTypes.array]);
-
-exports.stringOrArray = stringOrArray;
 var keyValueMap = _react2["default"].PropTypes.shape({
 	key: _react2["default"].PropTypes.string.isRequired,
 	value: _react2["default"].PropTypes.string.isRequired
 });
 
 exports.keyValueMap = keyValueMap;
+// ARRAY OF
+
 var arrayOfKeyValueMaps = _react2["default"].PropTypes.arrayOf(keyValueMap);
 
 exports.arrayOfKeyValueMaps = arrayOfKeyValueMaps;
@@ -193,17 +192,25 @@ exports.arrayOfStrings = arrayOfStrings;
 var arrayOfElements = _react2["default"].PropTypes.arrayOf(_react2["default"].PropTypes.element);
 
 exports.arrayOfElements = arrayOfElements;
+// OR
+
+var stringOrArray = _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.string, _react2["default"].PropTypes.array]);
+
+exports.stringOrArray = stringOrArray;
 var stringOrKeyValueMap = _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.string, keyValueMap]);
 
 exports.stringOrKeyValueMap = stringOrKeyValueMap;
+var stringOrArrayOfStrings = _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.string, arrayOfStrings]);
+
+exports.stringOrArrayOfStrings = stringOrArrayOfStrings;
 var elementOrArrayOfElement = _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.element, arrayOfElements]);
 
 exports.elementOrArrayOfElement = elementOrArrayOfElement;
 var arrayOfStringsOrArrayOfKeyValueMaps = _react2["default"].PropTypes.oneOfType([arrayOfStrings, arrayOfKeyValueMaps]);
 
 exports.arrayOfStringsOrArrayOfKeyValueMaps = arrayOfStringsOrArrayOfKeyValueMaps;
-var stringOrArrayOfStrings = _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.string, arrayOfStrings]);
-exports.stringOrArrayOfStrings = stringOrArrayOfStrings;
+var keyValueMapOrArrayOfKeyValueMaps = _react2["default"].PropTypes.oneOfType([keyValueMap, arrayOfKeyValueMaps]);
+exports.keyValueMapOrArrayOfKeyValueMaps = keyValueMapOrArrayOfKeyValueMaps;
 
 },{"react":"react"}],4:[function(_dereq_,module,exports){
 
@@ -314,6 +321,8 @@ var Autocomplete = (function (_React$Component) {
 
 		_get(Object.getPrototypeOf(Autocomplete.prototype), "constructor", this).call(this, props);
 
+		this.cache = {};
+
 		this.state = {
 			options: [],
 			query: props.value.value
@@ -336,17 +345,48 @@ var Autocomplete = (function (_React$Component) {
 			// Return empty options if inputValue length is beneath a treshold.
 			if (inputValue.length < this.props.minLength) {
 				return this.setState({
-					inputValue: inputValue,
+					query: inputValue,
 					options: []
 				});
 			}
 
-			this.filter(inputValue);
+			// Return cache if inputValue is found in the cache.
+			if (this.cache.hasOwnProperty(inputValue)) {
+				return this.setState({
+					query: inputValue,
+					options: this.cache[inputValue]
+				});
+			}
+
+			if (this.props.async == null) {
+				this.filter(inputValue);
+			} else {
+				this.filterAsync(inputValue);
+			}
+		}
+	}, {
+		key: "filterAsync",
+		value: function filterAsync(inputValue) {
+			this.setState({ "query": inputValue });
+
+			var done = function done(response) {
+				// Add the options to the cache.
+				this.cache[inputValue] = response;
+
+				// Get the cache from the current (!!!) inputValue. The results trail behind
+				// the user typing, so we have to pass the options of the current inputValue,
+				// not the options of the inputValue of the fetch.
+				var state = this.cache.hasOwnProperty(this.state.query) ? { options: this.cache[this.state.query] } : { options: [] };
+
+				this.setState(state);
+			};
+
+			this.props.async(inputValue, done.bind(this));
 		}
 	}, {
 		key: "filter",
 		value: function filter(inputValue) {
-			var options = inputValue === "" ? [] : this.props.options.filter(function (value) {
+			this.cache[inputValue] = inputValue === "" ? [] : this.props.options.filter(function (value) {
 				if ((0, _hireFormsUtils.isKeyValueMap)(value)) {
 					value = value.value;
 				}
@@ -356,7 +396,7 @@ var Autocomplete = (function (_React$Component) {
 
 			this.setState({
 				query: inputValue,
-				options: options
+				options: this.cache[inputValue]
 			});
 		}
 	}, {
@@ -397,6 +437,13 @@ var Autocomplete = (function (_React$Component) {
 	}, {
 		key: "render",
 		value: function render() {
+			var options = this.state.options.length !== 0 ? _react2["default"].createElement(_hireFormsOptions2["default"], {
+				onChange: this.handleOptionsChange.bind(this),
+				query: this.state.query,
+				ref: "options",
+				value: this.props.value,
+				values: (0, _hireFormsUtils.castKeyValueArray)(this.state.options) }) : null;
+
 			return _react2["default"].createElement(
 				"div",
 				{
@@ -409,12 +456,7 @@ var Autocomplete = (function (_React$Component) {
 					ref: "input",
 					value: this.state.query }),
 				this.props.children,
-				_react2["default"].createElement(_hireFormsOptions2["default"], {
-					onChange: this.handleOptionsChange.bind(this),
-					query: this.state.query,
-					ref: "options",
-					value: this.props.value,
-					values: (0, _hireFormsUtils.castKeyValueArray)(this.state.options) })
+				options
 			);
 		}
 	}]);
@@ -423,6 +465,7 @@ var Autocomplete = (function (_React$Component) {
 })(_react2["default"].Component);
 
 Autocomplete.propTypes = {
+	async: _react2["default"].PropTypes.func,
 	children: _react2["default"].PropTypes.element,
 	minLength: _react2["default"].PropTypes.number,
 	onChange: _react2["default"].PropTypes.func,
@@ -432,6 +475,7 @@ Autocomplete.propTypes = {
 };
 
 Autocomplete.defaultProps = {
+	minLength: 1,
 	value: ""
 };
 
@@ -453,42 +497,114 @@ var _react = _dereq_("react");
 
 var _react2 = _interopRequireDefault(_react);
 
-var elementOrArrayOfElement = _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.element, _react2["default"].PropTypes.arrayOf(_react2["default"].PropTypes.element)]);
+var keyValueMap = _react2["default"].PropTypes.shape({
+	key: _react2["default"].PropTypes.string.isRequired,
+	value: _react2["default"].PropTypes.string.isRequired
+});
 
-exports.elementOrArrayOfElement = elementOrArrayOfElement;
-/**
- * A string or an object,
- * example: {key: "somekey", value: "somevalue"}.
- */
-var stringOrKeyValue = _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.string, _react2["default"].PropTypes.shape({
-	key: _react2["default"].PropTypes.string,
-	value: _react2["default"].PropTypes.string
-})]);
+exports.keyValueMap = keyValueMap;
+// ARRAY OF
 
-exports.stringOrKeyValue = stringOrKeyValue;
+var arrayOfKeyValueMaps = _react2["default"].PropTypes.arrayOf(keyValueMap);
+
+exports.arrayOfKeyValueMaps = arrayOfKeyValueMaps;
+var arrayOfStrings = _react2["default"].PropTypes.arrayOf(_react2["default"].PropTypes.string);
+
+exports.arrayOfStrings = arrayOfStrings;
+var arrayOfElements = _react2["default"].PropTypes.arrayOf(_react2["default"].PropTypes.element);
+
+exports.arrayOfElements = arrayOfElements;
+// OR
+
 var stringOrArray = _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.string, _react2["default"].PropTypes.array]);
 
 exports.stringOrArray = stringOrArray;
-var stringOrArrayOfString = _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.string, _react2["default"].PropTypes.arrayOf(_react2["default"].PropTypes.string)]);
+var stringOrKeyValueMap = _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.string, keyValueMap]);
 
-exports.stringOrArrayOfString = stringOrArrayOfString;
-var arrayOfKeyValue = _react2["default"].PropTypes.arrayOf(_react2["default"].PropTypes.shape({
-	key: _react2["default"].PropTypes.string.isRequired,
-	value: _react2["default"].PropTypes.string.isRequired
-}));
+exports.stringOrKeyValueMap = stringOrKeyValueMap;
+var stringOrArrayOfStrings = _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.string, arrayOfStrings]);
 
-exports.arrayOfKeyValue = arrayOfKeyValue;
-/**
- * An array of strings or an array of key/value objects,
- * example: [{key: "somekey", value: "somevalue"}].
- */
-var arrayOfStringOrArrayOfKeyValue = _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.arrayOf(_react2["default"].PropTypes.string), _react2["default"].PropTypes.arrayOf(_react2["default"].PropTypes.shape({
-	key: _react2["default"].PropTypes.string,
-	value: _react2["default"].PropTypes.string
-}))]);
-exports.arrayOfStringOrArrayOfKeyValue = arrayOfStringOrArrayOfKeyValue;
+exports.stringOrArrayOfStrings = stringOrArrayOfStrings;
+var elementOrArrayOfElement = _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.element, arrayOfElements]);
+
+exports.elementOrArrayOfElement = elementOrArrayOfElement;
+var arrayOfStringsOrArrayOfKeyValueMaps = _react2["default"].PropTypes.oneOfType([arrayOfStrings, arrayOfKeyValueMaps]);
+
+exports.arrayOfStringsOrArrayOfKeyValueMaps = arrayOfStringsOrArrayOfKeyValueMaps;
+var keyValueMapOrArrayOfKeyValueMaps = _react2["default"].PropTypes.oneOfType([keyValueMap, arrayOfKeyValueMaps]);
+exports.keyValueMapOrArrayOfKeyValueMaps = keyValueMapOrArrayOfKeyValueMaps;
 
 },{"react":"react"}],2:[function(_dereq_,module,exports){
+
+/*
+ * @param {Array} list
+ * @returns {Boolean}
+ */
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.isListOfStrings = isListOfStrings;
+exports.isKeyValueMap = isKeyValueMap;
+exports.castArray = castArray;
+exports.castKeyValueArray = castKeyValueArray;
+
+function isListOfStrings(list) {
+	if (!Array.isArray(list) || !list.length) {
+		return false;
+	}
+
+	return list.every(function (item) {
+		return typeof item === "string";
+	});
+}
+
+/*
+ * @param {Object} map
+ * @returns {Boolean}
+ */
+
+function isKeyValueMap(map) {
+	if (map == null) {
+		return false;
+	}
+
+	return map.hasOwnProperty("key") && map.hasOwnProperty("value");
+}
+
+/*
+ * Always return an array.
+ *
+ * @param {String|Array} arr
+ * @returns {Array}
+ */
+
+function castArray(arr) {
+	return Array.isArray(arr) ? arr : [arr];
+}
+
+;
+
+/*
+ * Always return an array of key/value maps.
+ *
+ * @param {Number|String|Boolean|Array} list
+ * @returns {Array} Array of key value maps, ie: [{key: "A", value: "A"}, {key: "B", value: "B"}, ...]
+ */
+
+function castKeyValueArray(list) {
+	list = castArray(list);
+
+	return list.map(function (item) {
+		return isKeyValueMap(item) ? item : {
+			key: item,
+			value: item
+		};
+	});
+}
+
+},{}],3:[function(_dereq_,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -512,6 +628,8 @@ var _classnames = _dereq_("classnames");
 var _classnames2 = _interopRequireDefault(_classnames);
 
 var _hireFormsPropTypes = _dereq_("hire-forms-prop-types");
+
+var _hireFormsUtils = _dereq_("hire-forms-utils");
 
 var HIGHTLIGHT_CLASS = "highlight";
 
@@ -707,7 +825,7 @@ var Options = (function (_React$Component) {
 					displayValue = data.value.replace(re, "<span class=\"highlight\">$&</span>");
 				}
 
-				var selectedValue = Array.isArray(_this2.props.value) ? _this2.props.value : [_this2.props.value];
+				var selectedValue = (0, _hireFormsUtils.castArray)(_this2.props.value);
 
 				return _react2["default"].createElement("li", {
 					className: (0, _classnames2["default"])({ selected: selectedValue.indexOf(data.value) > -1 }),
@@ -743,19 +861,67 @@ Options.propTypes = {
 	onChange: _react2["default"].PropTypes.func.isRequired,
 	query: _react2["default"].PropTypes.string,
 	sortRelevance: _react2["default"].PropTypes.bool,
-	value: _hireFormsPropTypes.stringOrArrayOfString,
-	values: _hireFormsPropTypes.arrayOfKeyValue
+	value: _hireFormsPropTypes.keyValueMapOrArrayOfKeyValueMaps,
+	values: _hireFormsPropTypes.arrayOfKeyValueMaps
 };
 
 exports["default"] = Options;
 module.exports = exports["default"];
 
-},{"classnames":"classnames","hire-forms-prop-types":1,"react":"react"}]},{},[2])(2)
+},{"classnames":"classnames","hire-forms-prop-types":1,"hire-forms-utils":2,"react":"react"}]},{},[3])(3)
 });
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"classnames":7,"hire-forms-prop-types":8,"react":"react"}],7:[function(_dereq_,module,exports){
+},{"classnames":7,"hire-forms-prop-types":8,"hire-forms-utils":9,"react":"react"}],7:[function(_dereq_,module,exports){
 arguments[4][1][0].apply(exports,arguments)
 },{"dup":1}],8:[function(_dereq_,module,exports){
-arguments[4][3][0].apply(exports,arguments)
-},{"dup":3,"react":"react"}]},{},[5])(5)
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var _react = _dereq_("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+var elementOrArrayOfElement = _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.element, _react2["default"].PropTypes.arrayOf(_react2["default"].PropTypes.element)]);
+
+exports.elementOrArrayOfElement = elementOrArrayOfElement;
+/**
+ * A string or an object,
+ * example: {key: "somekey", value: "somevalue"}.
+ */
+var stringOrKeyValue = _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.string, _react2["default"].PropTypes.shape({
+	key: _react2["default"].PropTypes.string,
+	value: _react2["default"].PropTypes.string
+})]);
+
+exports.stringOrKeyValue = stringOrKeyValue;
+var stringOrArray = _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.string, _react2["default"].PropTypes.array]);
+
+exports.stringOrArray = stringOrArray;
+var stringOrArrayOfString = _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.string, _react2["default"].PropTypes.arrayOf(_react2["default"].PropTypes.string)]);
+
+exports.stringOrArrayOfString = stringOrArrayOfString;
+var arrayOfKeyValue = _react2["default"].PropTypes.arrayOf(_react2["default"].PropTypes.shape({
+	key: _react2["default"].PropTypes.string.isRequired,
+	value: _react2["default"].PropTypes.string.isRequired
+}));
+
+exports.arrayOfKeyValue = arrayOfKeyValue;
+/**
+ * An array of strings or an array of key/value objects,
+ * example: [{key: "somekey", value: "somevalue"}].
+ */
+var arrayOfStringOrArrayOfKeyValue = _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.arrayOf(_react2["default"].PropTypes.string), _react2["default"].PropTypes.arrayOf(_react2["default"].PropTypes.shape({
+	key: _react2["default"].PropTypes.string,
+	value: _react2["default"].PropTypes.string
+}))]);
+exports.arrayOfStringOrArrayOfKeyValue = arrayOfStringOrArrayOfKeyValue;
+
+},{"react":"react"}],9:[function(_dereq_,module,exports){
+arguments[4][4][0].apply(exports,arguments)
+},{"dup":4}]},{},[5])(5)
 });
