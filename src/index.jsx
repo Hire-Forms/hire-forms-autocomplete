@@ -87,6 +87,18 @@ class Autocomplete extends React.Component {
 	}
 
 	handleInputKeyDown(ev) {
+		// Escape
+		if (ev.keyCode === 27) {
+			this.setState({
+				options: [],
+				query: ""
+			});
+		}
+
+		if (this.refs.options == null) {
+			return;
+		}
+
 		// Up
 		if (ev.keyCode === 38) {
 			this.refs.options.highlightPrev();
@@ -100,14 +112,6 @@ class Autocomplete extends React.Component {
 		// Enter
 		if (ev.keyCode === 13) {
 			this.refs.options.select();
-		}
-
-		// Escape
-		if (ev.keyCode === 27) {
-			this.setState({
-				options: [],
-				query: ""
-			});
 		}
 	}
 
@@ -157,7 +161,10 @@ Autocomplete.propTypes = {
 
 Autocomplete.defaultProps = {
 	minLength: 1,
-	value: ""
+	value: {
+		key: "",
+		value: ""
+	}
 };
 
 export default Autocomplete;
