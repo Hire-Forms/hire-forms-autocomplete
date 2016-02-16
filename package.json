@@ -31,9 +31,9 @@
     "watchify": "^3.2.2"
   },
   "dependencies": {
-    "hire-forms-input": "^1.0.1",
-    "hire-forms-options": "^1.0.1",
-    "hire-forms-prop-types": "^2.0.1",
+    "hire-forms-input": "https://github.com/Hire-Forms/hire-forms-input.git#react-0.14",
+    "hire-forms-options": "https://github.com/Hire-Forms/hire-forms-options.git#react-0.14",
+    "hire-forms-prop-types": "https://github.com/Hire-Forms/hire-forms-prop-types.git#react-0.14",
     "hire-forms-utils": "^1.1.0"
   }
 }
