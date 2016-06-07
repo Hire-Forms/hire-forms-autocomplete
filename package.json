@@ -1,6 +1,6 @@
 {
   "name": "hire-forms-autocomplete",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "description": "",
   "main": "build/index.js",
   "scripts": {
@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/Hire-Forms/hire-forms-autocomplete",
   "peerDependencies": {
-		"classnames": "2.1.2",
+    "classnames": "2.1.2",
     "react": "^15.1.0",
     "react-dom": "^15.1.0"
   },
