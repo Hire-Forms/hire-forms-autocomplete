@@ -3,8 +3,10 @@
 node_modules/.bin/watchify src/index.jsx \
 	--detect-globals false \
 	--extension=.jsx \
+	--external classnames \
 	--external react \
+	--external react-dom \
 	--outfile 'derequire > build/index.js' \
 	--standalone HireFormsAutocomplete \
-	--transform [ babelify --plugins object-assign ] \
+	--transform [ babelify --presets [ es2015 react ] ] \
 	--verbose

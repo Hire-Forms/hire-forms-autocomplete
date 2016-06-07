@@ -1,20 +1,11 @@
 // Rebuild build
-import React from "react";
-
-import Input from "hire-forms-input";
-import Options from "hire-forms-options";
-
-import {arrayOfKeyValueMaps, keyValueMap} from "hire-forms-prop-types";
-import {castKeyValueArray, isKeyValueMap} from "hire-forms-utils";
+import React from 'react';
+import Input from 'hire-forms-input';
+import Options from 'hire-forms-options';
+import { arrayOfKeyValueMaps, keyValueMap } from 'hire-forms-prop-types';
+import { castKeyValueArray, isKeyValueMap } from 'hire-forms-utils';
 
 class Autocomplete extends React.Component {
-	componentWillReceiveProps(nextProps) {
-		this.setState({
-			query: nextProps.value.value,
-			options: []
-		});
-	}
-
 	constructor(props) {
 		super(props);
 
@@ -24,6 +15,13 @@ class Autocomplete extends React.Component {
 			options: [],
 			query: props.value.value
 		};
+	}
+
+	componentWillReceiveProps(nextProps) {
+		this.setState({
+			query: nextProps.value.value,
+			options: []
+		});
 	}
 
 	handleInputChange(inputValue) {
@@ -51,7 +49,7 @@ class Autocomplete extends React.Component {
 	}
 
 	filterAsync(inputValue) {
-		this.setState({"query": inputValue});
+		this.setState({'query': inputValue});
 
 		let done = function(response) {
 			// Add the options to the cache.
@@ -71,7 +69,7 @@ class Autocomplete extends React.Component {
 	};
 
 	filter(inputValue) {
-		this.cache[inputValue] = (inputValue === "") ?
+		this.cache[inputValue] = (inputValue === '') ?
 			[] :
 			this.props.options.filter((value) => {
 				if (isKeyValueMap(value)) {
@@ -92,7 +90,7 @@ class Autocomplete extends React.Component {
 		if (ev.keyCode === 27) {
 			this.setState({
 				options: [],
-				query: ""
+				query: ''
 			});
 		}
 
@@ -117,7 +115,7 @@ class Autocomplete extends React.Component {
 	}
 
 	/*
-	 * @param {Object} value Key/value map, ie: {key: "A", value: "A"}
+	 * @param {Object} value Key/value map, ie: {key: 'A', value: 'A'}
 	 */
 	handleOptionsChange(value) {
 		this.props.onChange(value);
@@ -136,13 +134,15 @@ class Autocomplete extends React.Component {
 		return (
 			<div
 				className="hire-forms-autocomplete"
-				style={{position: "relative"}}>
+				style={{ position: 'relative' }}
+			>
 				<Input
 					onChange={this.handleInputChange.bind(this)}
 					onKeyDown={this.handleInputKeyDown.bind(this)}
 					placeholder={this.props.placeholder}
 					ref="input"
-					value={this.state.query} />
+					value={this.state.query}
+				/>
 				{this.props.children}
 				{options}
 			</div>
@@ -163,8 +163,8 @@ Autocomplete.propTypes = {
 Autocomplete.defaultProps = {
 	minLength: 1,
 	value: {
-		key: "",
-		value: ""
+		key: '',
+		value: ''
 	}
 };
 
