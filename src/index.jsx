@@ -1,4 +1,3 @@
-// Rebuild build
 import React from 'react';
 import Input from 'hire-forms-input';
 import Options from 'hire-forms-options';
@@ -85,6 +84,7 @@ class Autocomplete extends React.Component {
 		});
 	}
 
+	/* TODO Should this be part of <Options> component? */
 	handleInputKeyDown(ev) {
 		// Escape
 		if (ev.keyCode === 27) {

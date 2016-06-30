@@ -784,8 +784,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // Rebuild build
-
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var Autocomplete = function (_React$Component) {
 	_inherits(Autocomplete, _React$Component);
@@ -872,6 +871,9 @@ var Autocomplete = function (_React$Component) {
 				options: this.cache[inputValue]
 			});
 		}
+
+		/* TODO Should this be part of <Options> component? */
+
 	}, {
 		key: 'handleInputKeyDown',
 		value: function handleInputKeyDown(ev) {
@@ -926,13 +928,15 @@ var Autocomplete = function (_React$Component) {
 				'div',
 				{
 					className: 'hire-forms-autocomplete',
-					style: { position: 'relative' } },
+					style: { position: 'relative' }
+				},
 				_react2.default.createElement(_hireFormsInput2.default, {
 					onChange: this.handleInputChange.bind(this),
 					onKeyDown: this.handleInputKeyDown.bind(this),
 					placeholder: this.props.placeholder,
 					ref: 'input',
-					value: this.state.query }),
+					value: this.state.query
+				}),
 				this.props.children,
 				options
 			);

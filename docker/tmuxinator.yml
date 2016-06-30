@@ -1,0 +1,17 @@
+# ~/.tmuxinator/hire-forms.yml
+
+name: project
+root: ~/hire-forms-autocomplete
+tmux_command: tmux -2
+windows:
+  - autocomplete:
+      layout: even-horizontal
+      panes:
+        - npm run watch
+        - git st
+  - options:
+      layout: even-horizontal
+      panes:
+        - npm run watch
+        - git st
+      root: ~/hire-forms-options
