@@ -7,11 +7,11 @@ windows:
   - autocomplete:
       layout: even-horizontal
       panes:
-        - npm run watch
         - git st
+        - npm start
   - options:
       layout: even-horizontal
       panes:
-        - npm run watch
         - git st
+        - npm start
       root: ~/hire-forms-options
