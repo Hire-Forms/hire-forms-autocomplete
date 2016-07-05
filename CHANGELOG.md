@@ -1,3 +1,6 @@
+### v2.1.1	(2016/7/5 7:54)
+* Bump hire-forms-options
+
 ### v2.1.0	(2016/7/5 7:51)
 * Add option to show empty message
 * Fix start watchers
