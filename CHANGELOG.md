@@ -1,3 +1,8 @@
+### v2.1.0	(2016/7/5 7:51)
+* Add option to show empty message
+* Fix start watchers
+* Add ToDo
+
 ### v2.0.0	(2016/6/7 14:51)
 * Bump React to 15.1.0
 
