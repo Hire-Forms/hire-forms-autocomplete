@@ -1,3 +1,6 @@
+### v2.1.2	(2016/7/5 7:58)
+* New build
+
 ### v2.1.1	(2016/7/5 7:54)
 * Bump hire-forms-options
 
