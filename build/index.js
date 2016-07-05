@@ -761,7 +761,7 @@ var Autocomplete = function (_React$Component) {
 	}, {
 		key: 'render',
 		value: function render() {
-			var options = this.state.options.length !== 0 ? _react2.default.createElement(_hireFormsOptions2.default, _extends({}, this.props, {
+			var options = this.state.options.length ? _react2.default.createElement(_hireFormsOptions2.default, _extends({}, this.props, {
 				onSelect: this.props.onChange,
 				query: this.state.query,
 				ref: 'options',

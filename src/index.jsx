@@ -12,7 +12,7 @@ class Autocomplete extends React.Component {
 
 		this.state = {
 			options: [],
-			query: props.value.value
+			query: props.value.value,
 		};
 	}
 
@@ -101,7 +101,7 @@ class Autocomplete extends React.Component {
 	}
 
 	render() {
-		let options = (this.state.options.length !== 0) ?
+		let options = (this.state.options.length) ?
 			<Options
 				{...this.props}
 				onSelect={this.props.onChange}
