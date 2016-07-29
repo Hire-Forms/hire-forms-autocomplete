@@ -1,3 +1,8 @@
+### v2.1.5	(2016/7/29 12:29)
+* Add babel stage-1 to allow class properties
+* Bump hire-forms-options
+* Reset autocomplete on outside click
+
 ### v2.1.4	(2016/7/5 11:47)
 * New build
 
