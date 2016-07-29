@@ -16,11 +16,28 @@ class Autocomplete extends React.Component {
 		};
 	}
 
+	componentDidMount() {
+		document.addEventListener('click', this.handleDocumentClick, false);
+	}
+
 	componentWillReceiveProps(nextProps) {
 		this.setState({
 			query: nextProps.value.value,
 			options: []
 		});
+	}
+
+	componentWillUnmount() {
+		document.removeEventListener('click', this.handleDocumentClick, false);
+	}
+
+	handleDocumentClick = (ev) => {
+		if (this.state.options.length) {
+			this.setState({
+				options: [],
+				query: ''
+			});
+		}
 	}
 
 	filter(inputValue) {
@@ -74,6 +91,7 @@ class Autocomplete extends React.Component {
 				showIsEmpty: false,
 			});
 		}
+
 		// Return cache if inputValue is found in the cache.
 		if (this.cache.hasOwnProperty(inputValue)) {
 			const options = this.cache[inputValue];
