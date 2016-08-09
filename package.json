@@ -23,19 +23,23 @@
     "react-dom": "^15.1.0"
   },
   "devDependencies": {
-    "babel-core": "^6.9.1",
-    "babel-eslint": "^6.0.4",
-    "babel-preset-es2015": "^6.9.0",
-    "babel-preset-react": "^6.5.0",
+    "babel-core": "^6.13.2",
+    "babel-eslint": "^6.1.2",
+    "babel-preset-es2015": "^6.13.2",
+    "babel-preset-react": "^6.11.1",
+    "babel-preset-stage-1": "^6.13.0",
     "babelify": "^7.3.0",
     "derequire": "^2.0.3",
-    "eslint": "^2.11.1",
-    "eslint-plugin-react": "^5.1.1",
+    "eslint": "^3.2.2",
+    "eslint-config-airbnb": "^10.0.0",
+    "eslint-plugin-import": "^1.12.0",
+    "eslint-plugin-jsx-a11y": "^2.0.1",
+    "eslint-plugin-react": "^6.0.0",
     "hi-bump": "^1.1.1",
     "watchify": "^3.7.0"
   },
   "dependencies": {
-    "hire-forms-input": "^2.0.0",
+    "hire-forms-input": "^2.1.0",
     "hire-forms-options": "^2.2.1",
     "hire-forms-prop-types": "^2.0.1",
     "hire-forms-utils": "^1.2.0"

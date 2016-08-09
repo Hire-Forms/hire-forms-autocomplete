@@ -1,19 +1,15 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import Input from 'hire-forms-input';
 import Options from 'hire-forms-options';
 import { arrayOfKeyValueMaps, keyValueMap } from 'hire-forms-prop-types';
 import { castKeyValueArray, isKeyValueMap } from 'hire-forms-utils';
 
-class Autocomplete extends React.Component {
-	constructor(props) {
-		super(props);
+class Autocomplete extends Component {
+	cache = {};
 
-		this.cache = {};
-
-		this.state = {
-			options: [],
-			query: props.value.value,
-		};
+	state = {
+		options: [],
+		query: this.props.value.value,
 	}
 
 	componentDidMount() {
@@ -23,7 +19,7 @@ class Autocomplete extends React.Component {
 	componentWillReceiveProps(nextProps) {
 		this.setState({
 			query: nextProps.value.value,
-			options: []
+			options: [],
 		});
 	}
 
@@ -31,11 +27,11 @@ class Autocomplete extends React.Component {
 		document.removeEventListener('click', this.handleDocumentClick, false);
 	}
 
-	handleDocumentClick = (ev) => {
+	handleDocumentClick = (/* ev */) => {
 		if (this.state.options.length) {
 			this.setState({
 				options: [],
-				query: ''
+				query: '',
 			});
 		}
 	}
@@ -54,13 +50,13 @@ class Autocomplete extends React.Component {
 		const options = this.cache[inputValue];
 		this.setState({
 			query: inputValue,
-			options: options,
+			options,
 			showIsEmpty: !options.length,
 		});
 	}
 
 	filterAsync(inputValue) {
-		this.setState({'query': inputValue});
+		this.setState({ query: inputValue });
 
 		const done = (response) => {
 			// Add the options to the cache.
@@ -74,15 +70,15 @@ class Autocomplete extends React.Component {
 				[];
 
 			this.setState({
-				options: options,
+				options,
 				showIsEmpty: !options.length,
 			});
 		};
 
 		this.props.async(inputValue, done.bind(this));
-	};
+	}
 
-	handleInputChange(inputValue) {
+	handleInputChange = (inputValue) => {
 		// Return empty options if inputValue length is beneath a treshold.
 		if (inputValue.length < this.props.minLength) {
 			return this.setState({
@@ -96,7 +92,7 @@ class Autocomplete extends React.Component {
 		if (this.cache.hasOwnProperty(inputValue)) {
 			const options = this.cache[inputValue];
 			return this.setState({
-				options: options,
+				options,
 				query: inputValue,
 				showIsEmpty: !options.length,
 			});
@@ -107,15 +103,17 @@ class Autocomplete extends React.Component {
 		} else {
 			this.filterAsync(inputValue);
 		}
+
+		return null;
 	}
 
-	handleInputKeyDown(ev) {
-		if (this.refs.options == null) return;
+	handleInputKeyDown = (ev) => {
+		if (this.optionsElement == null) return;
 
 		if (ev.keyCode === 27) this.setState({ options: [], query: '' }); // Escape
-		if (ev.keyCode === 38) this.refs.options.highlightPrev();         // Up
-		if (ev.keyCode === 40) this.refs.options.highlightNext();         // Down
-		if (ev.keyCode === 13) this.refs.options.select();                // Enter
+		if (ev.keyCode === 38) this.optionsElement.highlightPrev();         // Up
+		if (ev.keyCode === 40) this.optionsElement.highlightNext();         // Down
+		if (ev.keyCode === 13) this.optionsElement.select();                // Enter
 	}
 
 	render() {
@@ -124,8 +122,9 @@ class Autocomplete extends React.Component {
 				{...this.props}
 				onSelect={this.props.onChange}
 				query={this.state.query}
-				ref="options"
-				values={castKeyValueArray(this.state.options)} /> :
+				ref={(el) => { this.optionsElement = el; }}
+				values={castKeyValueArray(this.state.options)}
+			/> :
 			null;
 
 		if (this.props.showIfEmpty && this.state.showIsEmpty) {
@@ -142,10 +141,10 @@ class Autocomplete extends React.Component {
 				style={{ position: 'relative' }}
 			>
 				<Input
-					onChange={this.handleInputChange.bind(this)}
-					onKeyDown={this.handleInputKeyDown.bind(this)}
+					focus={this.props.focus}
+					onChange={this.handleInputChange}
+					onKeyDown={this.handleInputKeyDown}
 					placeholder={this.props.placeholder}
-					ref="input"
 					value={this.state.query}
 				/>
 				{this.props.children}
@@ -156,15 +155,16 @@ class Autocomplete extends React.Component {
 }
 
 Autocomplete.propTypes = {
-	async: React.PropTypes.func,
-	children: React.PropTypes.element,
-	isEmptyMessage: React.PropTypes.func,
-	minLength: React.PropTypes.number,
-	onChange: React.PropTypes.func,
+	async: PropTypes.func,
+	children: PropTypes.element,
+	focus: PropTypes.bool,
+	isEmptyMessage: PropTypes.func,
+	minLength: PropTypes.number,
+	onChange: PropTypes.func,
 	options: arrayOfKeyValueMaps,
-	placeholder: React.PropTypes.string,
-	showIfEmpty: React.PropTypes.bool,
-	value: keyValueMap
+	placeholder: PropTypes.string,
+	showIfEmpty: PropTypes.bool,
+	value: keyValueMap,
 };
 
 Autocomplete.defaultProps = {
@@ -173,8 +173,8 @@ Autocomplete.defaultProps = {
 	showIfEmpty: true,
 	value: {
 		key: '',
-		value: ''
-	}
+		value: '',
+	},
 };
 
 export default Autocomplete;
