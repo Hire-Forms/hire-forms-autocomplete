@@ -1,3 +1,6 @@
+### v2.1.6	(2016/8/9 12:47)
+* Modernize tooling (babel, eslint)
+
 ### v2.1.5	(2016/7/29 12:29)
 * Add babel stage-1 to allow class properties
 * Bump hire-forms-options
