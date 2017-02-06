@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import cx from 'classnames';
 import Input from 'hire-forms-input';
 import Options from 'hire-forms-options';
 import { arrayOfKeyValueMaps, keyValueMap } from 'hire-forms-prop-types';
@@ -10,7 +11,7 @@ class Autocomplete extends Component {
 	state = {
 		options: [],
 		query: this.props.value.value,
-	}
+	};
 
 	componentDidMount() {
 		document.addEventListener('click', this.handleDocumentClick, false);
@@ -34,7 +35,7 @@ class Autocomplete extends Component {
 				query: '',
 			});
 		}
-	}
+	};
 
 	filter(inputValue) {
 		this.cache[inputValue] = (inputValue === '') ?
@@ -51,7 +52,6 @@ class Autocomplete extends Component {
 		this.setState({
 			query: inputValue,
 			options,
-			showIsEmpty: !options.length,
 		});
 	}
 
@@ -59,6 +59,8 @@ class Autocomplete extends Component {
 		this.setState({ query: inputValue });
 
 		const done = (response) => {
+			if (response == null) response = [];
+
 			// Add the options to the cache.
 			this.cache[inputValue] = response;
 
@@ -71,7 +73,6 @@ class Autocomplete extends Component {
 
 			this.setState({
 				options,
-				showIsEmpty: !options.length,
 			});
 		};
 
@@ -84,7 +85,6 @@ class Autocomplete extends Component {
 			return this.setState({
 				options: [],
 				query: inputValue,
-				showIsEmpty: false,
 			});
 		}
 
@@ -94,7 +94,6 @@ class Autocomplete extends Component {
 			return this.setState({
 				options,
 				query: inputValue,
-				showIsEmpty: !options.length,
 			});
 		}
 
@@ -105,7 +104,7 @@ class Autocomplete extends Component {
 		}
 
 		return null;
-	}
+	};
 
 	handleInputKeyDown = (ev) => {
 		if (this.optionsElement == null) return;
@@ -114,30 +113,24 @@ class Autocomplete extends Component {
 		if (ev.keyCode === 38) this.optionsElement.highlightPrev();         // Up
 		if (ev.keyCode === 40) this.optionsElement.highlightNext();         // Down
 		if (ev.keyCode === 13) this.optionsElement.select();                // Enter
-	}
+	};
 
 	render() {
-		let options = (this.state.options.length) ?
-			<Options
-				{...this.props}
-				onSelect={this.props.onChange}
-				query={this.state.query}
-				ref={(el) => { this.optionsElement = el; }}
-				values={castKeyValueArray(this.state.options)}
-			/> :
-			null;
-
-		if (this.props.showIfEmpty && this.state.showIsEmpty) {
-			options = (
-				<div className="empty-options">
-					{this.props.isEmptyMessage(this.state.query)}
-				</div>
-			);
-		}
+		// Show nothing found message instead of <Options>, if
+		const nothingFound = (
+			this.state.query !== '' && // A query has been entered in the <input>
+			!this.state.options.length && // The resulting options array is empty
+			this.props.showNothingFoundMessage // The showNothingFoundMessage flag is set to true
+		);
 
 		return (
 			<div
-				className="hire-forms-autocomplete"
+				className={cx('hire-forms-autocomplete', {
+					'nothing-found': nothingFound,
+					'query-not-in-list':
+						this.state.query !== '' &&
+						!this.state.options.some((v) => v.value === this.state.query),
+				})}
 				style={{ position: 'relative' }}
 			>
 				<Input
@@ -148,7 +141,21 @@ class Autocomplete extends Component {
 					value={this.state.query}
 				/>
 				{this.props.children}
-				{options}
+				{
+					this.state.options.length > 0 &&
+					<Options
+						onSelect={this.props.onChange}
+						query={this.state.query}
+						ref={(el) => { this.optionsElement = el; }}
+						values={castKeyValueArray(this.state.options)}
+					/>
+				}
+				{
+					nothingFound &&
+					<div className="empty-options">
+						{this.props.nothingFoundMessage(this.state.query)}
+					</div>
+				}
 			</div>
 		);
 	}
@@ -158,19 +165,19 @@ Autocomplete.propTypes = {
 	async: PropTypes.func,
 	children: PropTypes.element,
 	focus: PropTypes.bool,
-	isEmptyMessage: PropTypes.func,
+	nothingFoundMessage: PropTypes.func,
 	minLength: PropTypes.number,
 	onChange: PropTypes.func,
 	options: arrayOfKeyValueMaps,
 	placeholder: PropTypes.string,
-	showIfEmpty: PropTypes.bool,
+	showNothingFoundMessage: PropTypes.bool,
 	value: keyValueMap,
 };
 
 Autocomplete.defaultProps = {
-	isEmptyMessage: (query) => `No results found for '${query}'`,
+	nothingFoundMessage: (query) => `No results found for '${query}'`,
 	minLength: 1,
-	showIfEmpty: true,
+	showNothingFoundMessage: true,
 	value: {
 		key: '',
 		value: '',
