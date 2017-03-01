@@ -71,9 +71,7 @@ class Autocomplete extends Component {
 				this.cache[this.state.query] :
 				[];
 
-			this.setState({
-				options,
-			});
+			this.setState({ options });
 		};
 
 		this.props.async(inputValue, done.bind(this));
