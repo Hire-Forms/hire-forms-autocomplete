@@ -67,6 +67,8 @@ var Autocomplete = function (_Component) {
 				});
 			}
 
+			// if (this.props.onInputChange != null) this.props.onInputChange(inputValue);
+
 			// Return cache if inputValue is found in the cache.
 			if (_this.cache.hasOwnProperty(inputValue)) {
 				var options = _this.cache[inputValue];

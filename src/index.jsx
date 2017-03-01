@@ -88,6 +88,8 @@ class Autocomplete extends Component {
 			});
 		}
 
+		// if (this.props.onInputChange != null) this.props.onInputChange(inputValue);
+
 		// Return cache if inputValue is found in the cache.
 		if (this.cache.hasOwnProperty(inputValue)) {
 			const options = this.cache[inputValue];
