@@ -1,3 +1,7 @@
+### v2.1.7	(2017/3/1 13:6)
+* New build
+* Refactor 'nothing found'
+
 ### v2.1.6	(2016/8/9 12:47)
 * Modernize tooling (babel, eslint)
 
