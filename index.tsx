@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as cx from 'classnames';
 import Input from 'hire-forms-input';
-import Options from 'hire-forms-options';
+import Options, { IOptionComponentProps } from 'hire-forms-options';
 
 interface IKeyValue {
 	key: string | number;
@@ -15,6 +15,7 @@ interface IProps {
 	nothingFoundMessage?: (message: string) => void;
 	onChange: (option: IKeyValue) => void;
 	onInputChange?: (inputValue: string) => void;
+	optionComponent: React.StatelessComponent<IOptionComponentProps>
 	options?: IKeyValue[];
 	placeholder?: string;
 	showNothingFoundMessage?: boolean;
@@ -179,6 +180,7 @@ class Autocomplete extends React.Component<IProps, IState> {
 					this.state.options.length > 0 &&
 					<Options
 						onSelect={this.props.onChange}
+						optionComponent={this.props.optionComponent}
 						query={this.state.query}
 						ref={(el) => { this.optionsElement = el; }}
 						values={this.state.options}

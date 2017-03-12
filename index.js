@@ -28,7 +28,6 @@ class Autocomplete extends React.Component {
                     query: inputValue,
                 });
             }
-            console.log('before!');
             if (this.props.onInputChange != null)
                 this.props.onInputChange(inputValue);
             console.log(this.cache, inputValue);
@@ -106,7 +105,7 @@ class Autocomplete extends React.Component {
             React.createElement(hire_forms_input_1.default, { focus: this.props.focus, onChange: this.handleInputChange, onKeyDown: this.handleInputKeyDown, placeholder: this.props.placeholder, value: this.state.query }),
             this.props.children,
             this.state.options.length > 0 &&
-                React.createElement(hire_forms_options_1.default, { onSelect: this.props.onChange, query: this.state.query, ref: (el) => { this.optionsElement = el; }, values: this.state.options }),
+                React.createElement(hire_forms_options_1.default, { onSelect: this.props.onChange, optionComponent: this.props.optionComponent, query: this.state.query, ref: (el) => { this.optionsElement = el; }, values: this.state.options }),
             nothingFound &&
                 React.createElement("div", { className: "empty-options" }, this.props.nothingFoundMessage(this.state.query))));
     }
