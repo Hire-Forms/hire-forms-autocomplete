@@ -1,3 +1,6 @@
+### v2.1.11	(2017/3/12 11:34)
+* Bump HireForm Options
+
 ### v2.1.10	(2017/3/12 9:7)
 * Not all props are required
 
