@@ -1,3 +1,6 @@
+### v2.1.9	(2017/3/12 9:1)
+* Remove and update deps
+
 ### v2.1.8	(2017/3/12 8:38)
 * Move to typescript
 * Clean up
