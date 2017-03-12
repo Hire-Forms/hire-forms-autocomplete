@@ -1,3 +1,6 @@
+### v2.1.10	(2017/3/12 9:7)
+* Not all props are required
+
 ### v2.1.9	(2017/3/12 9:1)
 * Remove and update deps
 
