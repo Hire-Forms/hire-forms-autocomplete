@@ -1,3 +1,7 @@
+### v2.1.8	(2017/3/12 8:38)
+* Move to typescript
+* Clean up
+
 ### v2.1.7	(2017/3/1 13:6)
 * New build
 * Refactor 'nothing found'
