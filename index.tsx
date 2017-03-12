@@ -8,29 +8,29 @@ interface IKeyValue {
 	value: string;
 }
 
-interface IAutocompleteProps {
+interface IProps {
 	async?: (inputValue: string, done: (response: IKeyValue[]) => void) => void;
-	focus: boolean;
-	minLength: number;
-	nothingFoundMessage: (message: string) => void;
-	onChange?: (option: IKeyValue) => void;
+	focus?: boolean;
+	minLength?: number;
+	nothingFoundMessage?: (message: string) => void;
+	onChange: (option: IKeyValue) => void;
 	onInputChange?: (inputValue: string) => void;
 	options?: IKeyValue[];
 	placeholder?: string;
-	showNothingFoundMessage: boolean;
-	value: IKeyValue;
+	showNothingFoundMessage?: boolean;
+	value?: IKeyValue;
 }
 
-interface IAutocompleteState {
+interface IState {
 	options: IKeyValue[];
 	query: string;
 }
 
-class Autocomplete extends React.Component<IAutocompleteProps, IAutocompleteState> {
+class Autocomplete extends React.Component<IProps, IState> {
 	private cache = {};
 	private optionsElement = null;
 
-	public static defaultProps: IAutocompleteProps = {
+	public static defaultProps: Partial<IProps> = {
 		focus: false,
 		nothingFoundMessage: (query) => `No results found for '${query}'`,
 		minLength: 1,
