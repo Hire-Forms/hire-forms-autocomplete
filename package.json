@@ -2,7 +2,7 @@
   "name": "hire-forms-autocomplete",
   "version": "2.1.8",
   "description": "",
-  "main": "build/index.js",
+  "main": "index.js",
   "scripts": {
     "bump": "hi-bump",
     "start": "tsc",
@@ -25,10 +25,8 @@
   "dependencies": {
     "@types/react": "^15.0.13",
     "classnames": "^2.2.5",
-    "hire-forms-input": "^2.1.0",
-    "hire-forms-options": "^2.2.1",
-    "hire-forms-prop-types": "^2.0.1",
-    "hire-forms-utils": "^1.2.0",
+    "hire-forms-input": "^3.0.1",
+    "hire-forms-options": "^2.2.3",
     "react": "^15.4.2"
   }
 }
