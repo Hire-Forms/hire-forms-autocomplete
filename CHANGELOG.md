@@ -1,3 +1,6 @@
+### v2.1.12	(2017/3/12 13:7)
+* Bump HireForms Options
+
 ### v2.1.11	(2017/3/12 11:34)
 * Bump HireForm Options
 
