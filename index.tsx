@@ -113,7 +113,6 @@ class Autocomplete extends React.Component<IProps, IState> {
 			});
 		}
 
-		console.log('before!');
 		if (this.props.onInputChange != null) this.props.onInputChange(inputValue);
 
 		// Return cache if inputValue is found in the cache.
