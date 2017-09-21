@@ -30,7 +30,6 @@ class Autocomplete extends React.Component {
             }
             if (this.props.onInputChange != null)
                 this.props.onInputChange(inputValue);
-            console.log(this.cache, inputValue);
             if (this.cache.hasOwnProperty(inputValue)) {
                 const options = this.cache[inputValue];
                 return this.setState({

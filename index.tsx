@@ -8,14 +8,14 @@ interface IKeyValue {
 	value: string;
 }
 
-interface IProps {
+export interface IAutocompleteProps {
 	async?: (inputValue: string, done: (response: IKeyValue[]) => void) => void;
 	focus?: boolean;
 	minLength?: number;
-	nothingFoundMessage?: (message: string) => void;
+	nothingFoundMessage?: (message: string) => string;
 	onChange: (option: IKeyValue) => void;
 	onInputChange?: (inputValue: string) => void;
-	optionComponent: React.StatelessComponent<IOptionComponentProps>
+	optionComponent?: React.StatelessComponent<IOptionComponentProps>
 	options?: IKeyValue[];
 	placeholder?: string;
 	showNothingFoundMessage?: boolean;
@@ -27,11 +27,11 @@ interface IState {
 	query: string;
 }
 
-class Autocomplete extends React.Component<IProps, IState> {
+class Autocomplete extends React.Component<IAutocompleteProps, IState> {
 	private cache = {};
 	private optionsElement = null;
 
-	public static defaultProps: Partial<IProps> = {
+	public static defaultProps: Partial<IAutocompleteProps> = {
 		focus: false,
 		nothingFoundMessage: (query) => `No results found for '${query}'`,
 		minLength: 1,
@@ -116,7 +116,6 @@ class Autocomplete extends React.Component<IProps, IState> {
 		if (this.props.onInputChange != null) this.props.onInputChange(inputValue);
 
 		// Return cache if inputValue is found in the cache.
-		console.log(this.cache, inputValue);
 		if (this.cache.hasOwnProperty(inputValue)) {
 			const options = this.cache[inputValue];
 			return this.setState({
@@ -124,7 +123,7 @@ class Autocomplete extends React.Component<IProps, IState> {
 				query: inputValue,
 			});
 		}
-
+		
 		if (this.props.async == null) {
 			this.filter(inputValue);
 		} else {
