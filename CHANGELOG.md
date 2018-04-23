@@ -1,3 +1,8 @@
+### v2.1.13	(2018/4/23 13:7)
+* Add types
+* Bump deps
+* Remove console.log
+
 ### v2.1.12	(2017/3/12 13:7)
 * Bump HireForms Options
 
