@@ -1,3 +1,6 @@
+### v2.1.14	(2018/4/23 16:2)
+* Move react to peerDependency
+
 ### v2.1.13	(2018/4/23 13:7)
 * Add types
 * Bump deps

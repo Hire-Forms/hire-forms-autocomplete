@@ -1,6 +1,6 @@
 {
   "name": "hire-forms-autocomplete",
-  "version": "2.1.13",
+  "version": "2.1.14",
   "description": "",
   "main": "index.js",
   "types": "index.d.ts",
@@ -29,7 +29,7 @@
     "hire-forms-input": "^3.0.4",
     "hire-forms-options": "^2.2.5"
   },
-	"peerDependencies": {
+  "peerDependencies": {
     "react": "^16.3.2"
-	}
+  }
 }
