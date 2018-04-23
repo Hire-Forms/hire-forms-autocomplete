@@ -3,7 +3,7 @@ import * as cx from 'classnames';
 import Input from 'hire-forms-input';
 import Options, { IOptionComponentProps } from 'hire-forms-options';
 
-interface IKeyValue {
+export interface IKeyValue {
 	key: string | number;
 	value: string;
 }
@@ -22,7 +22,7 @@ export interface IAutocompleteProps {
 	value?: IKeyValue;
 }
 
-interface IState {
+export interface IState {
 	options: IKeyValue[];
 	query: string;
 }
@@ -31,7 +31,7 @@ class Autocomplete extends React.Component<IAutocompleteProps, IState> {
 	private cache = {};
 	private optionsElement = null;
 
-	public static defaultProps: Partial<IAutocompleteProps> = {
+	static defaultProps: Partial<IAutocompleteProps> = {
 		focus: false,
 		nothingFoundMessage: (query) => `No results found for '${query}'`,
 		minLength: 1,
@@ -39,16 +39,16 @@ class Autocomplete extends React.Component<IAutocompleteProps, IState> {
 		value: { key: '',  value: '' },
 	};
 
-	public state = {
+	state = {
 		options: [],
 		query: this.props.value.value,
 	};
 
-	public componentDidMount() {
+	componentDidMount() {
 		document.addEventListener('click', this.handleDocumentClick, false);
 	}
 
-	public componentWillReceiveProps(nextProps) {
+	componentWillReceiveProps(nextProps) {
 		// Todo: Value is reset after props.onInputChange in this.handleInputChange
 		this.setState({
 			query: nextProps.value.value,
@@ -56,7 +56,7 @@ class Autocomplete extends React.Component<IAutocompleteProps, IState> {
 		});
 	}
 
-	public componentWillUnmount() {
+	componentWillUnmount() {
 		document.removeEventListener('click', this.handleDocumentClick, false);
 	}
 
