@@ -22,12 +22,13 @@
   "devDependencies": {
     "@types/react": "^16.3.12",
     "hi-bump": "^1.1.1",
+    "react": "^16.3.2",
     "typescript": "^2.8.3"
   },
   "dependencies": {
     "classnames": "^2.2.5",
     "hire-forms-input": "^3.0.4",
-    "hire-forms-options": "^2.2.5"
+    "hire-forms-options": "^2.2.6"
   },
   "peerDependencies": {
     "react": "^16.3.2"
